@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get update && sudo apt-get install -y qt6-base-dev ninja-build desktop-file-utils nmap
+      - run: sudo apt-get update && sudo apt-get install -y qt6-base-dev libgl-dev ninja-build desktop-file-utils nmap
       - run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
       - run: cmake --build build --parallel 2
       - run: QT_QPA_PLATFORM=offscreen ctest --test-dir build --output-on-failure

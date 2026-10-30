@@ -12,7 +12,7 @@ Ubuntu 22.04 / 24.04：
 
 ```bash
 sudo apt update
-sudo apt install build-essential cmake ninja-build qt6-base-dev nmap desktop-file-utils
+sudo apt install build-essential cmake ninja-build qt6-base-dev libgl-dev nmap desktop-file-utils
 ```
 
 运行需要图形桌面（X11 或 Wayland）。扫描使用普通 TCP socket，不需要 root。
@@ -73,7 +73,7 @@ flatpak run io.github.ZiqiChai.NetScanner
 
 ## 常见问题
 
-- **CMake 找不到 Qt6**：确认已安装 `qt6-base-dev`，并检查 `CMAKE_PREFIX_PATH` 是否指向其他 Qt。
+- **CMake 找不到 Qt6**：确认已安装 `qt6-base-dev` 与 `libgl-dev`（Qt6Gui 依赖 OpenGL 头文件），并检查 `CMAKE_PREFIX_PATH` 是否指向其他 Qt。
 - **缺少 xcb / Wayland 平台插件**：从终端启动查看具体报错。
 - **应用列表中没有图标或无法启动**：确认安装前缀与桌面会话 PATH，重新登录后再试。
 - **扫描结果为空**：默认隐藏无响应主机，见[使用指南](USAGE.md#搜索隐藏与详情)。

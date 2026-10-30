@@ -18,7 +18,7 @@
 Ubuntu 22.04 / 24.04：
 
 ```bash
-sudo apt install build-essential cmake ninja-build qt6-base-dev
+sudo apt install build-essential cmake ninja-build qt6-base-dev libgl-dev
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
 ./build/netscanner
