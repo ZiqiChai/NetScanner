@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+ <id>io.github.ZiqiChai.NetScanner</id>
+ <name>NetScanner</name>
+ <summary>Discover LAN hosts and scan TCP ports</summary>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>MIT</project_license>
+ <developer id="io.github.ZiqiChai"><name>Ziqi CHAI</name></developer>
+ <description><p>A Qt6 desktop utility for discovering responding IPv4 hosts and scanning TCP ports, with cancellable scans and CSV export.</p></description>
+ <launchable type="desktop-id">io.github.ZiqiChai.NetScanner.desktop</launchable>
+ <url type="homepage">https://github.com/ZiqiChai/NetScanner</url>
+ <url type="bugtracker">https://github.com/ZiqiChai/NetScanner/issues</url>
+ <content_rating type="oars-1.1"/>
+ <provides><binary>netscanner</binary></provides>
+ <releases><release version="0.1.0" date="2026-10-30"/></releases>
+</component>

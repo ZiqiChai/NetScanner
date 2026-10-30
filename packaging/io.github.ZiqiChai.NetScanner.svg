@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <title>NetScanner — network discovery</title>
+  <rect x="4" y="4" width="120" height="120" rx="26" fill="#17345b"/>
+  <g fill="none" stroke="#71b9ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 27H27v13 M88 27h13v13 M27 88v13h13 M101 88v13H88"/>
+  </g>
+  <path d="M64 48v17M43 80V65h42v15" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#ffffff">
+    <circle cx="64" cy="45" r="9"/>
+    <circle cx="43" cy="82" r="9"/>
+    <circle cx="85" cy="82" r="9"/>
+  </g>
+</svg>

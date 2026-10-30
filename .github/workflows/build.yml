@@ -1,0 +1,42 @@
+name: Build and test
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y qt6-base-dev ninja-build desktop-file-utils nmap
+      - run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+      - run: cmake --build build --parallel 2
+      - run: QT_QPA_PLATFORM=offscreen ctest --test-dir build --output-on-failure
+      - run: desktop-file-validate packaging/io.github.ZiqiChai.NetScanner.desktop
+      - run: DESTDIR="$PWD/build/stage" cmake --install build --prefix /usr
+      - run: tar -C build/stage -czf netscanner-${{ matrix.os }}.tar.gz .
+      - run: sha256sum netscanner-${{ matrix.os }}.tar.gz > netscanner-${{ matrix.os }}.tar.gz.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: netscanner-${{ matrix.os }}
+          path: |
+            netscanner-*.tar.gz
+            netscanner-*.tar.gz.sha256
+  flatpak:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y flatpak flatpak-builder
+      - run: flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      - run: flatpak-builder --user --install-deps-from=flathub --force-clean --repo=repo build-flatpak packaging/io.github.ZiqiChai.NetScanner.yml
+      - run: flatpak build-bundle repo netscanner.flatpak io.github.ZiqiChai.NetScanner
+      - run: sha256sum netscanner.flatpak > netscanner.flatpak.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: netscanner-flatpak
+          path: |
+            netscanner.flatpak
+            netscanner.flatpak.sha256

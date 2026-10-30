@@ -1,0 +1,13 @@
+build*/
+.flatpak-builder/
+*.flatpak
+repo/
+dist/
+.env
+.env.*
+!.env.example
+*.user
+*.log
+netscanner-*.tar.gz*
+*.flatpak.sha256
+docs/test-results.txt

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=NetScanner
+Name[zh_CN]=NetScanner
+Comment=Discover network hosts and TCP ports
+Exec=netscanner
+Icon=io.github.ZiqiChai.NetScanner
+Terminal=false
+Categories=Network;
+Keywords=IP;TCP;LAN;Scanner;
+StartupNotify=true
