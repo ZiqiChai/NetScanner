@@ -8,12 +8,24 @@
 - Qt ≥ 6.2（Core、Network、Widgets；测试另需 Qt Test）
 - 可选：`nmap`（Nmap 对照测试）、`desktop-file-utils`（校验桌面入口）
 
-Ubuntu 22.04 / 24.04：
+Ubuntu 22.04 / 24.04 / 26.04：
 
 ```bash
 sudo apt update
 sudo apt install build-essential cmake ninja-build qt6-base-dev libgl-dev nmap desktop-file-utils
 ```
+
+### Ubuntu 20.04
+
+20.04 软件源没有 Qt6，可用 [aqtinstall](https://github.com/miurahr/aqtinstall) 安装官方 Qt 6.2.4：
+
+```bash
+sudo apt install build-essential python3-pip libgl-dev libxkbcommon-x11-0 libfontconfig1 libdbus-1-3 libegl1 libgssapi-krb5-2
+pip3 install --user "cmake<4" ninja aqtinstall
+aqt install-qt -O "$HOME/Qt" linux desktop 6.2.4 gcc_64 --archives qtbase icu
+```
+
+构建时加 `-DCMAKE_PREFIX_PATH=$HOME/Qt/6.2.4/gcc_64`。
 
 运行需要图形桌面（X11 或 Wayland）。扫描使用普通 TCP socket，不需要 root。
 
@@ -65,11 +77,11 @@ flatpak run io.github.ZiqiChai.NetScanner
 
 `.github/workflows/build.yml` 在 push、pull request 和手动触发时运行：
 
-1. 在 Ubuntu 22.04 与 24.04 上构建、运行 CTest、校验桌面入口。
+1. 在 Ubuntu 20.04、22.04、24.04、26.04 容器中构建、运行 CTest（含 Nmap 对照）、校验桌面入口。20.04 使用 aqtinstall 安装的 Qt 6.2.4，其余使用系统 Qt6。
 2. 将安装目录打包为 `netscanner-ubuntu-<版本>.tar.gz` 并附 SHA256 文件上传。
 3. 构建 Flatpak，上传 `netscanner.flatpak` 及其 SHA256 文件。
 
-下载后用 `sha256sum -c` 校验。原生 tar 包是安装目录树，依赖对应 Ubuntu 版本的 Qt6 系统库。
+下载后用 `sha256sum -c` 校验。原生 tar 包是安装目录树，依赖对应 Ubuntu 版本的 Qt6 系统库；20.04 包依赖上述 aqtinstall 安装的 Qt。
 
 ## 常见问题
 

@@ -7,21 +7,50 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-    runs-on: ${{ matrix.os }}
+        include:
+          - name: ubuntu-20.04
+            container: ubuntu:20.04
+            qt: aqt
+          - name: ubuntu-22.04
+            container: ubuntu:22.04
+            qt: system
+          - name: ubuntu-24.04
+            container: ubuntu:24.04
+            qt: system
+          - name: ubuntu-26.04
+            container: ubuntu:26.04
+            qt: system
+    name: native (${{ matrix.name }})
+    runs-on: ubuntu-24.04
+    container: ${{ matrix.container }}
+    env:
+      DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get update && sudo apt-get install -y qt6-base-dev libgl-dev ninja-build desktop-file-utils nmap
+      - name: Install dependencies (system Qt)
+        if: matrix.qt == 'system'
+        run: |
+          apt-get update
+          apt-get install -y build-essential cmake ninja-build qt6-base-dev libgl-dev desktop-file-utils nmap
+      # Ubuntu 20.04 ships no Qt6 packages; install Qt 6.2.4 with aqtinstall.
+      - name: Install dependencies (aqtinstall Qt)
+        if: matrix.qt == 'aqt'
+        run: |
+          apt-get update
+          apt-get install -y build-essential python3-pip libgl-dev libxkbcommon-x11-0 libfontconfig1 libdbus-1-3 libegl1 libgssapi-krb5-2 desktop-file-utils nmap
+          pip3 install "cmake<4" ninja aqtinstall
+          aqt install-qt -O /opt/qt linux desktop 6.2.4 gcc_64 --archives qtbase icu
+          echo "CMAKE_PREFIX_PATH=/opt/qt/6.2.4/gcc_64" >> "$GITHUB_ENV"
       - run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
       - run: cmake --build build --parallel 2
       - run: QT_QPA_PLATFORM=offscreen ctest --test-dir build --output-on-failure
       - run: desktop-file-validate packaging/io.github.ZiqiChai.NetScanner.desktop
       - run: DESTDIR="$PWD/build/stage" cmake --install build --prefix /usr
-      - run: tar -C build/stage -czf netscanner-${{ matrix.os }}.tar.gz .
-      - run: sha256sum netscanner-${{ matrix.os }}.tar.gz > netscanner-${{ matrix.os }}.tar.gz.sha256
+      - run: tar -C build/stage -czf netscanner-${{ matrix.name }}.tar.gz .
+      - run: sha256sum netscanner-${{ matrix.name }}.tar.gz > netscanner-${{ matrix.name }}.tar.gz.sha256
       - uses: actions/upload-artifact@v4
         with:
-          name: netscanner-${{ matrix.os }}
+          name: netscanner-${{ matrix.name }}
           path: |
             netscanner-*.tar.gz
             netscanner-*.tar.gz.sha256

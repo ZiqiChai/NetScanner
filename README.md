@@ -15,7 +15,7 @@
 
 ## 快速开始
 
-Ubuntu 22.04 / 24.04：
+Ubuntu 22.04 / 24.04 / 26.04：
 
 ```bash
 sudo apt install build-essential cmake ninja-build qt6-base-dev libgl-dev
@@ -29,6 +29,8 @@ cmake --build build --parallel
 ```bash
 cmake --install build --prefix "$HOME/.local"
 ```
+
+Ubuntu 20.04 的软件源没有 Qt6，构建方法见[安装与部署](docs/INSTALL.md#ubuntu-2004)。
 
 ## 文档
 
